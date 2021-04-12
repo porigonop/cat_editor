@@ -24,17 +24,62 @@ fct_delete () {
     tail -n $(($total_line_in_file-$line)) $file >> $file.swp;
     mv $file.swp $file
 }
-fct_to_apply=$1
-shift
-case $fct_to_apply in
-    edit)
-        fct_edit $@
-        ;;
-    show)
-        fct_show $@
-        ;;
-    delete)
-        fct_delete $@
-        ;;
 
-esac
+##################
+## Sub-routines ##
+##################
+
+sub_new() {
+  echo 'New'
+}
+
+sub_open() {
+  echo 'Open'
+}
+
+sub_close() {
+  echo 'Close'
+}
+
+sub_git() {
+  
+}
+
+##########
+## Main ##
+##########
+
+if [ "$1" = '--help' ]; then
+  echo "Usage: $0 [file]"
+  exit 0
+elif [ -f "$1" ]; then
+  cat -n "$1"
+  echo '===================================================='
+  options=('New' 'Open' 'Quit' 'Close' )
+else
+  options=('New' 'Open' 'Quit')
+fi
+
+echo 'Welcome in cat editor \o/'
+echo ''
+
+PS3="Action: "
+
+select item in ${options[*]}
+do 
+  case $item in
+    Quit)
+      exit 0
+      ;;
+    New)
+      sub_new
+      ;;
+    Open)
+      sub_open
+      ;;
+    Close)
+      sub_close
+      ;;
+  esac
+done
+
