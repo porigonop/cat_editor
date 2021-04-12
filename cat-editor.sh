@@ -25,6 +25,12 @@ fct_delete () {
     mv $file.swp $file
 }
 
+##########
+## VARS ##
+##########
+
+current_file=""
+
 ##################
 ## Sub-routines ##
 ##################
@@ -42,7 +48,10 @@ sub_close() {
 }
 
 sub_git() {
-  
+  select item in Add Commit Pull Push
+  do
+    echo $REPLY
+  done  
 }
 
 ##########
@@ -54,10 +63,11 @@ if [ "$1" = '--help' ]; then
   exit 0
 elif [ -f "$1" ]; then
   cat -n "$1"
+  current_file="$1"
   echo '===================================================='
-  options=('New' 'Open' 'Quit' 'Close' )
+  options=('New' 'Open' 'Quit' 'Git' 'Close' )
 else
-  options=('New' 'Open' 'Quit')
+  options=('New' 'Open' 'Quit' 'Git')
 fi
 
 echo 'Welcome in cat editor \o/'
@@ -76,6 +86,9 @@ do
       ;;
     Open)
       sub_open
+      ;;
+    Git)
+      sub_git
       ;;
     Close)
       sub_close
